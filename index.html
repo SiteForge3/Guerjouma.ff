@@ -1,794 +1,1176 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="قرجومه - Free Fire Content Creator | صانعة محتوى فري فاير">
-    <meta name="theme-color" content="#0a0a0a">
-    <title>قرجومه | Elite Gaming</title>
-    
-    <style>
-        /* ============ إعدادات أساسية ============ */
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-card: #1a1a1a;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-            --accent: #ff3d3d;
-            --accent-glow: rgba(255, 61, 61, 0.4);
-            --youtube: #ff0000;
-            --tiktok: #00f2ea;
-            --instagram: #d62976;
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --border-medium: rgba(255, 255, 255, 0.1);
-            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="قرجومه - Free Fire Content Creator | صانعة محتوى فري فاير">
+<meta name="theme-color" content="#050505">
+<title>قرجومه | Elite Gaming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+<style>
+:root {
+--bg: #050505;
+--bg-card: #0c0c0f;
+--bg-elevated: #141418;
+--fg: #f0f0f0;
+--muted: #6b6b7b;
+--accent: #ff2d2d;
+--accent-soft: rgba(255, 45, 45, 0.12);
+--accent-glow: rgba(255, 45, 45, 0.5);
+--youtube: #ff0000;
+--tiktok: #00f2ea;
+--instagram: #e1306c;
+--border: rgba(255, 255, 255, 0.05);
+--border-hover: rgba(255, 255, 255, 0.12);
+--radius: 20px;
+}
 
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
-            position: relative;
-            line-height: 1.6;
-            letter-spacing: -0.01em;
-        }
+html {
+scroll-behavior: smooth;
+font-size: 16px;
+}
 
-        /* ============ خلفية متحركة احترافية ============ */
-        .bg-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
+body {
+font-family: 'Tajawal', 'Segoe UI', system-ui, sans-serif;
+background: var(--bg);
+color: var(--fg);
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow-x: hidden;
+position: relative;
+line-height: 1.5;
+}
 
-        .bg-particles::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 30% 20%, rgba(255, 61, 61, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 70% 60%, rgba(255, 61, 61, 0.02) 0%, transparent 50%),
-                radial-gradient(circle at 50% 80%, rgba(214, 41, 118, 0.02) 0%, transparent 50%);
-            animation: bgShift 20s ease-in-out infinite;
-        }
+/* ========== CANVAS للجزيئات ========== */
+#particleCanvas {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 0;
+}
 
-        @keyframes bgShift {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(2%, -1%) rotate(1deg); }
-            66% { transform: translate(-1%, 1%) rotate(-1deg); }
-        }
+/* ========== توهج خلفي ========== */
+.ambient-glow {
+position: fixed;
+pointer-events: none;
+z-index: 0;
+}
 
-        /* خطوط شبكية خفيفة */
-        .grid-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.03;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-        }
+.ambient-glow.glow-1 {
+top: -20%;
+right: -20%;
+width: 500px;
+height: 500px;
+background: radial-gradient(circle, rgba(255, 45, 45, 0.06) 0%, transparent 70%);
+animation: floatGlow1 12s ease-in-out infinite;
+}
 
-        /* ============ الحاوية الرئيسية ============ */
-        .main-wrapper {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 440px;
-            padding: 40px 24px;
-        }
+.ambient-glow.glow-2 {
+bottom: -15%;
+left: -15%;
+width: 400px;
+height: 400px;
+background: radial-gradient(circle, rgba(225, 48, 108, 0.04) 0%, transparent 70%);
+animation: floatGlow2 15s ease-in-out infinite;
+}
 
-        /* ============ كارد رئيسي ============ */
-        .profile-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 24px;
-            padding: 48px 32px 40px;
-            position: relative;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 
-                0 1px 2px rgba(0, 0, 0, 0.4),
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-                0 1px 0 rgba(255, 255, 255, 0.02) inset;
-            transition: all 0.4s var(--transition-smooth);
-        }
+.ambient-glow.glow-3 {
+top: 40%;
+left: 50%;
+transform: translateX(-50%);
+width: 300px;
+height: 300px;
+background: radial-gradient(circle, rgba(255, 45, 45, 0.03) 0%, transparent 70%);
+animation: floatGlow3 10s ease-in-out infinite;
+}
 
-        /* تأثير حدود متوهجة */
-        .profile-card::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: 25px;
-            padding: 1px;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 61, 61, 0.3),
-                transparent 40%,
-                transparent 60%,
-                rgba(255, 61, 61, 0.15)
-            );
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0.5;
-            transition: opacity 0.5s var(--transition-smooth);
-        }
+@keyframes floatGlow1 {
+0%, 100% { transform: translate(0, 0); }
+50% { transform: translate(-30px, 20px); }
+}
+@keyframes floatGlow2 {
+0%, 100% { transform: translate(0, 0); }
+50% { transform: translate(20px, -30px); }
+}
+@keyframes floatGlow3 {
+0%, 100% { transform: translateX(-50%) scale(1); }
+50% { transform: translateX(-50%) scale(1.3); }
+}
 
-        .profile-card:hover::before {
-            opacity: 1;
-        }
+/* ========== شبكة خلفية ========== */
+.grid-bg {
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 0;
+opacity: 0.025;
+background-image:
+linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px);
+background-size: 80px 80px;
+mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+-webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+}
 
-        /* ============ صورة البروفايل ============ */
-        .avatar-wrapper {
-            position: relative;
-            width: 130px;
-            height: 130px;
-            margin: 0 auto 28px;
-        }
+/* ========== خطوط مسحوبة خلفية ========== */
+.scan-lines {
+position: fixed;
+inset: 0;
+pointer-events: none;
+z-index: 1;
+background: repeating-linear-gradient(
+0deg,
+transparent,
+transparent 2px,
+rgba(0, 0, 0, 0.03) 2px,
+rgba(0, 0, 0, 0.03) 4px
+);
+opacity: 0.4;
+}
 
-        .avatar-ring {
-            position: absolute;
-            inset: -6px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            border-top-color: var(--accent);
-            border-right-color: var(--accent);
-            animation: ringRotate 4s linear infinite;
-            opacity: 0.6;
-        }
+/* ========== الحاوية الرئيسية ========== */
+.main-container {
+position: relative;
+z-index: 10;
+width: 100%;
+max-width: 460px;
+padding: 32px 20px;
+}
 
-        @keyframes ringRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+/* ========== الكارد الرئيسي ========== */
+.card {
+position: relative;
+background: var(--bg-card);
+border: 1px solid var(--border);
+border-radius: 28px;
+padding: 52px 32px 44px;
+overflow: hidden;
+box-shadow:
+0 0 0 1px rgba(255,255,255,0.02) inset,
+0 1px 0 rgba(255,255,255,0.03) inset,
+0 20px 60px rgba(0,0,0,0.5),
+0 4px 16px rgba(0,0,0,0.3);
+transition: box-shadow 0.6s ease;
+}
 
-        .avatar-ring:nth-child(2) {
-            inset: -10px;
-            border-top-color: transparent;
-            border-right-color: transparent;
-            border-bottom-color: var(--instagram);
-            border-left-color: var(--instagram);
-            animation-direction: reverse;
-            animation-duration: 6s;
-            opacity: 0.4;
-        }
+.card:hover {
+box-shadow:
+0 0 0 1px rgba(255,255,255,0.04) inset,
+0 1px 0 rgba(255,255,255,0.05) inset,
+0 25px 80px rgba(0,0,0,0.6),
+0 4px 16px rgba(0,0,0,0.3),
+0 0 120px -20px var(--accent-glow);
+}
 
-        .avatar-img {
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s var(--transition-smooth);
-            filter: brightness(1.05) contrast(1.05);
-            position: relative;
-            z-index: 1;
-            background: var(--bg-secondary);
-        }
+/* حد متوهج متحرك */
+.card::before {
+content: '';
+position: absolute;
+top: -1px;
+left: -1px;
+right: -1px;
+bottom: -1px;
+border-radius: 29px;
+background: conic-gradient(
+from var(--border-angle, 0deg),
+transparent 0%,
+var(--accent) 8%,
+transparent 16%,
+transparent 50%,
+var(--instagram) 58%,
+transparent 66%
+);
+z-index: -1;
+opacity: 0.4;
+animation: rotateBorder 8s linear infinite;
+}
 
-        .avatar-wrapper:hover .avatar-img {
-            transform: scale(1.05);
-            border-color: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 40px var(--accent-glow);
-        }
+@property --border-angle {
+syntax: '<angle>';
+initial-value: 0deg;
+inherits: false;
+}
 
-        /* ============ المعلومات النصية ============ */
-        .profile-info {
-            text-align: center;
-            margin-bottom: 36px;
-        }
+@keyframes rotateBorder {
+to { --border-angle: 360deg; }
+}
 
-        .username {
-            font-size: 1.75rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 4px;
-            color: var(--text-primary);
-            position: relative;
-            display: inline-block;
-        }
+/* خلفية الكارد الداخلية */
+.card::after {
+content: '';
+position: absolute;
+inset: 1px;
+border-radius: 27px;
+background: var(--bg-card);
+z-index: -1;
+}
 
-        .username::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 24px;
-            height: 2px;
-            background: var(--accent);
-            border-radius: 2px;
-            opacity: 0.7;
-        }
+/* ========== الأفاتار ========== */
+.avatar-section {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-bottom: 32px;
+position: relative;
+}
 
-        .verified-badge {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            background: var(--accent);
-            border-radius: 50%;
-            margin-right: 6px;
-            vertical-align: middle;
-            position: relative;
-            animation: badgePulse 2s ease-in-out infinite;
-        }
+.avatar-container {
+position: relative;
+width: 140px;
+height: 140px;
+cursor: pointer;
+}
 
-        @keyframes badgePulse {
-            0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
-            50% { box-shadow: 0 0 0 8px transparent; }
-        }
+/* حلقات دائرية متحركة */
+.orbit-ring {
+position: absolute;
+border-radius: 50%;
+border: 1.5px solid transparent;
+}
 
-        .verified-badge::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 10px;
-            color: white;
-            font-weight: bold;
-        }
+.orbit-ring.ring-1 {
+inset: -8px;
+border-top-color: var(--accent);
+border-left-color: var(--accent);
+animation: spin 3s linear infinite;
+opacity: 0.7;
+}
 
-        .bio {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            font-weight: 400;
-            letter-spacing: 0.01em;
-            margin-top: 4px;
-        }
+.orbit-ring.ring-2 {
+inset: -16px;
+border-bottom-color: var(--instagram);
+border-right-color: var(--instagram);
+animation: spin 5s linear infinite reverse;
+opacity: 0.35;
+}
 
-        .tag {
-            display: inline-block;
-            background: rgba(255, 61, 61, 0.1);
-            color: var(--accent);
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 100px;
-            margin-top: 10px;
-            letter-spacing: 0.02em;
-            border: 1px solid rgba(255, 61, 61, 0.15);
-        }
+.orbit-ring.ring-3 {
+inset: -24px;
+border-top-color: var(--tiktok);
+border-left-color: var(--tiktok);
+animation: spin 7s linear infinite;
+opacity: 0.2;
+}
 
-        /* ============ فاصل ============ */
-        .divider {
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                var(--border-medium) 20%,
-                var(--border-medium) 80%,
-                transparent
-            );
-            margin-bottom: 32px;
-        }
+/* نقاط مدارية */
+.orbit-dot {
+position: absolute;
+width: 6px;
+height: 6px;
+border-radius: 50%;
+filter: blur(0.5px);
+}
 
-        /* ============ أزرار التواصل ============ */
-        .links-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+.orbit-dot.dot-1 {
+top: -8px;
+left: 50%;
+transform: translateX(-50%);
+background: var(--accent);
+box-shadow: 0 0 12px var(--accent-glow);
+animation: dotPulse 2s ease-in-out infinite;
+}
 
-        .link-btn {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 14px;
-            padding: 16px 20px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 500;
-            font-size: 0.95rem;
-            letter-spacing: 0.01em;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            transition: all 0.35s var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            -webkit-user-select: none;
-            user-select: none;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+.orbit-dot.dot-2 {
+bottom: -16px;
+right: -2px;
+width: 5px;
+height: 5px;
+background: var(--instagram);
+box-shadow: 0 0 10px rgba(225, 48, 108, 0.5);
+animation: dotPulse 2.5s ease-in-out infinite 0.5s;
+}
 
-        /* تأثير الضوء عند hover */
-        .link-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.03) 50%,
-                transparent
-            );
-            transition: left 0.6s var(--transition-smooth);
-        }
+.orbit-dot.dot-3 {
+top: 50%;
+left: -24px;
+width: 4px;
+height: 4px;
+background: var(--tiktok);
+box-shadow: 0 0 8px rgba(0, 242, 234, 0.4);
+animation: dotPulse 3s ease-in-out infinite 1s;
+}
 
-        .link-btn:hover::after {
-            left: 100%;
-        }
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
 
-        .link-btn:hover {
-            transform: translateY(-2px);
-            border-color: var(--border-medium);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
+@keyframes dotPulse {
+0%, 100% { opacity: 1; transform: scale(1); }
+50% { opacity: 0.5; transform: scale(0.6); }
+}
 
-        .link-btn:active {
-            transform: scale(0.98);
-            transition: transform 0.15s var(--transition-smooth);
-        }
+.avatar-img {
+width: 140px;
+height: 140px;
+border-radius: 50%;
+object-fit: cover;
+border: 3px solid rgba(255, 255, 255, 0.08);
+position: relative;
+z-index: 2;
+background: var(--bg-elevated);
+transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 
-        /* تخصيص كل منصة */
-        .link-btn.youtube {
-            border-left: 3px solid var(--youtube);
-        }
-        .link-btn.youtube:hover {
-            background: rgba(255, 0, 0, 0.08);
-            border-color: rgba(255, 0, 0, 0.3);
-            box-shadow: 0 8px 32px rgba(255, 0, 0, 0.15);
-        }
+.avatar-container:hover .avatar-img {
+transform: scale(1.08);
+border-color: rgba(255, 45, 45, 0.3);
+box-shadow:
+0 0 0 8px rgba(255, 45, 45, 0.08),
+0 0 60px rgba(255, 45, 45, 0.2);
+}
 
-        .link-btn.tiktok {
-            border-left: 3px solid var(--tiktok);
-        }
-        .link-btn.tiktok:hover {
-            background: rgba(0, 242, 234, 0.06);
-            border-color: rgba(0, 242, 234, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 242, 234, 0.12);
-        }
+/* ========== حالة أونلاين ========== */
+.status-badge {
+position: absolute;
+bottom: 6px;
+right: 6px;
+width: 22px;
+height: 22px;
+background: #0c0c0f;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 3;
+border: 2.5px solid var(--bg-card);
+}
 
-        .link-btn.instagram {
-            border-left: 3px solid var(--instagram);
-        }
-        .link-btn.instagram:hover {
-            background: rgba(214, 41, 118, 0.08);
-            border-color: rgba(214, 41, 118, 0.3);
-            box-shadow: 0 8px 32px rgba(214, 41, 118, 0.15);
-        }
+.status-dot {
+width: 12px;
+height: 12px;
+background: #00e676;
+border-radius: 50%;
+animation: statusPulse 2.5s ease-in-out infinite;
+box-shadow: 0 0 8px rgba(0, 230, 118, 0.5);
+}
 
-        /* ============ أيقونات المنصات ============ */
-        .platform-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
-            position: relative;
-            z-index: 1;
-        }
+@keyframes statusPulse {
+0%, 100% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.4); }
+50% { box-shadow: 0 0 0 6px rgba(0, 230, 118, 0); }
+}
 
-        .platform-icon.yt {
-            background: rgba(255, 0, 0, 0.15);
-            color: #ff4444;
-        }
-        .platform-icon.tt {
-            background: rgba(0, 242, 234, 0.1);
-            color: #00f2ea;
-        }
-        .platform-icon.ig {
-            background: rgba(214, 41, 118, 0.15);
-            color: #e0447c;
-        }
+/* ========== معلومات البروفايل ========== */
+.profile-info {
+text-align: center;
+margin-bottom: 8px;
+}
 
-        .link-label {
-            flex: 1;
-            text-align: right;
-        }
+.name-row {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+margin-bottom: 6px;
+}
 
-        .link-label .platform-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-        }
+.display-name {
+font-size: 2rem;
+font-weight: 900;
+letter-spacing: -0.03em;
+background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 50%, #ffffff 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+line-height: 1.2;
+}
 
-        .link-label .platform-handle {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 1px;
-        }
+.verified {
+width: 26px;
+height: 26px;
+background: linear-gradient(135deg, var(--accent), #ff6b6b);
+border-radius: 50%;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+animation: verifyPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s both;
+box-shadow: 0 0 16px var(--accent-glow);
+}
 
-        .arrow-icon {
-            opacity: 0.3;
-            transition: all 0.35s var(--transition-smooth);
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
+.verified svg {
+width: 13px;
+height: 13px;
+fill: white;
+}
 
-        .link-btn:hover .arrow-icon {
-            opacity: 1;
-            transform: translateX(-4px);
-        }
+@keyframes verifyPop {
+from { transform: scale(0) rotate(-90deg); opacity: 0; }
+to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
 
-        /* ============ تذييل ============ */
-        .footer-note {
-            text-align: center;
-            margin-top: 32px;
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.2);
-            letter-spacing: 0.05em;
-            font-weight: 300;
-        }
+.tagline {
+color: var(--muted);
+font-size: 0.95rem;
+font-weight: 400;
+margin-bottom: 12px;
+}
 
-        /* ============ تحسينات الموبايل ============ */
-        @media (max-width: 480px) {
-            .profile-card {
-                padding: 36px 20px 32px;
-                border-radius: 20px;
-            }
-            
-            .avatar-wrapper {
-                width: 110px;
-                height: 110px;
-                margin-bottom: 24px;
-            }
-            
-            .avatar-img {
-                width: 110px;
-                height: 110px;
-            }
-            
-            .username {
-                font-size: 1.5rem;
-            }
-            
-            .bio {
-                font-size: 0.85rem;
-            }
-            
-            .link-btn {
-                padding: 14px 16px;
-                gap: 10px;
-                border-radius: 14px;
-            }
-            
-            .platform-icon {
-                width: 38px;
-                height: 38px;
-                border-radius: 10px;
-                font-size: 1.1rem;
-            }
-            
-            .links-stack {
-                gap: 10px;
-            }
-        }
+/* ========== شارات ========== */
+.badges-row {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+flex-wrap: wrap;
+}
 
-        @media (max-width: 360px) {
-            .main-wrapper {
-                padding: 20px 12px;
-            }
-            
-            .profile-card {
-                padding: 28px 14px 24px;
-            }
-            
-            .avatar-wrapper {
-                width: 95px;
-                height: 95px;
-                margin-bottom: 20px;
-            }
-            
-            .avatar-img {
-                width: 95px;
-                height: 95px;
-            }
-            
-            .username {
-                font-size: 1.3rem;
-            }
-            
-            .link-btn {
-                padding: 12px 14px;
-                font-size: 0.85rem;
-            }
-            
-            .platform-icon {
-                width: 34px;
-                height: 34px;
-                font-size: 1rem;
-            }
-        }
+.badge {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+padding: 5px 14px;
+border-radius: 100px;
+font-size: 0.72rem;
+font-weight: 700;
+letter-spacing: 0.03em;
+text-transform: uppercase;
+}
 
-        /* ============ أنيميشن الظهور ============ */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.badge-fire {
+background: linear-gradient(135deg, rgba(255, 45, 45, 0.15), rgba(255, 45, 45, 0.05));
+color: var(--accent);
+border: 1px solid rgba(255, 45, 45, 0.2);
+}
 
-        .animate-in {
-            animation: fadeInUp 0.7s var(--transition-smooth) both;
-        }
+.badge-elite {
+background: linear-gradient(135deg, rgba(168, 130, 255, 0.12), rgba(168, 130, 255, 0.04));
+color: #a882ff;
+border: 1px solid rgba(168, 130, 255, 0.18);
+}
 
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
+.badge-icon {
+font-size: 0.8rem;
+}
 
-        /* ============ تأثير Ripple للنقر ============ */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(0);
-            animation: rippleEffect 0.7s ease-out;
-            pointer-events: none;
-        }
+/* ========== أزرار الروابط ========== */
+.links-container {
+margin-top: 28px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
 
-        @keyframes rippleEffect {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-    </style>
-</head>
+.link-card {
+display: flex;
+align-items: center;
+gap: 16px;
+padding: 18px 20px;
+border-radius: 18px;
+text-decoration: none;
+color: var(--fg);
+background: var(--bg-elevated);
+border: 1px solid var(--border);
+position: relative;
+overflow: hidden;
+cursor: pointer;
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+-webkit-user-select: none;
+user-select: none;
+outline: none;
+}
+
+/* خط ملون على الجنب */
+.link-card::before {
+content: '';
+position: absolute;
+top: 12px;
+bottom: 12px;
+right: 0;
+width: 3px;
+border-radius: 0 3px 3px 0;
+transition: all 0.4s ease;
+opacity: 0.6;
+}
+
+.link-card.youtube::before { background: var(--youtube); }
+.link-card.tiktok::before { background: var(--tiktok); }
+.link-card.instagram::before { background: var(--instagram); }
+
+/* توهج خلفي عند الـ hover */
+.link-card::after {
+content: '';
+position: absolute;
+inset: 0;
+opacity: 0;
+transition: opacity 0.4s ease;
+border-radius: 18px;
+}
+
+.link-card.youtube::after {
+background: radial-gradient(ellipse at 95% 50%, rgba(255, 0, 0, 0.08) 0%, transparent 60%);
+}
+.link-card.tiktok::after {
+background: radial-gradient(ellipse at 95% 50%, rgba(0, 242, 234, 0.06) 0%, transparent 60%);
+}
+.link-card.instagram::after {
+background: radial-gradient(ellipse at 95% 50%, rgba(225, 48, 108, 0.08) 0%, transparent 60%);
+}
+
+.link-card:hover {
+transform: translateY(-3px) scale(1.01);
+border-color: var(--border-hover);
+box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.link-card:hover::after {
+opacity: 1;
+}
+
+.link-card:hover::before {
+opacity: 1;
+top: 8px;
+bottom: 8px;
+}
+
+.link-card:active {
+transform: translateY(-1px) scale(0.99);
+transition-duration: 0.1s;
+}
+
+/* أيقونة المنصة */
+.link-icon {
+width: 50px;
+height: 50px;
+border-radius: 14px;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+position: relative;
+z-index: 1;
+transition: all 0.4s ease;
+}
+
+.link-card:hover .link-icon {
+transform: scale(1.1);
+}
+
+.link-icon.yt-icon {
+background: linear-gradient(135deg, rgba(255, 0, 0, 0.18), rgba(255, 0, 0, 0.06));
+color: #ff4444;
+box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+}
+
+.link-card:hover .link-icon.yt-icon {
+box-shadow: 0 0 24px rgba(255, 0, 0, 0.2);
+}
+
+.link-icon.tt-icon {
+background: linear-gradient(135deg, rgba(0, 242, 234, 0.12), rgba(0, 242, 234, 0.04));
+color: #00f2ea;
+}
+
+.link-card:hover .link-icon.tt-icon {
+box-shadow: 0 0 24px rgba(0, 242, 234, 0.15);
+}
+
+.link-icon.ig-icon {
+background: linear-gradient(135deg, rgba(225, 48, 108, 0.18), rgba(131, 58, 180, 0.08));
+color: #e1306c;
+}
+
+.link-card:hover .link-icon.ig-icon {
+box-shadow: 0 0 24px rgba(225, 48, 108, 0.2);
+}
+
+.link-icon svg {
+width: 22px;
+height: 22px;
+fill: currentColor;
+}
+
+/* نص الرابط */
+.link-text {
+flex: 1;
+position: relative;
+z-index: 1;
+}
+
+.link-platform {
+font-weight: 700;
+font-size: 0.95rem;
+color: var(--fg);
+margin-bottom: 1px;
+}
+
+.link-handle {
+font-size: 0.78rem;
+color: var(--muted);
+font-weight: 400;
+direction: ltr;
+text-align: right;
+}
+
+/* سهم */
+.link-arrow {
+position: relative;
+z-index: 1;
+width: 36px;
+height: 36px;
+border-radius: 10px;
+background: rgba(255, 255, 255, 0.03);
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+transition: all 0.4s ease;
+opacity: 0.4;
+}
+
+.link-card:hover .link-arrow {
+opacity: 1;
+background: rgba(255, 255, 255, 0.06);
+transform: translateX(-4px);
+}
+
+.link-arrow svg {
+width: 16px;
+height: 16px;
+fill: none;
+stroke: currentColor;
+stroke-width: 2;
+stroke-linecap: round;
+stroke-linejoin: round;
+color: var(--fg);
+}
+
+/* ========== Ripple ========== */
+.ripple-effect {
+position: absolute;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.15);
+transform: scale(0);
+animation: rippleAnim 0.8s ease-out forwards;
+pointer-events: none;
+z-index: 0;
+}
+
+@keyframes rippleAnim {
+to {
+transform: scale(4);
+opacity: 0;
+}
+}
+
+/* ========== التذييل ========== */
+.footer {
+text-align: center;
+margin-top: 28px;
+position: relative;
+z-index: 10;
+}
+
+.footer-text {
+font-size: 0.72rem;
+color: rgba(255, 255, 255, 0.15);
+font-weight: 400;
+letter-spacing: 0.04em;
+}
+
+.footer-heart {
+color: var(--accent);
+display: inline-block;
+animation: heartBeat 1.5s ease-in-out infinite;
+font-size: 0.65rem;
+}
+
+@keyframes heartBeat {
+0%, 100% { transform: scale(1); }
+15% { transform: scale(1.3); }
+30% { transform: scale(1); }
+45% { transform: scale(1.15); }
+60% { transform: scale(1); }
+}
+
+/* ========== أنيميشن الظهور ========== */
+@keyframes slideUp {
+from {
+opacity: 0;
+transform: translateY(30px) scale(0.97);
+filter: blur(8px);
+}
+to {
+opacity: 1;
+transform: translateY(0) scale(1);
+filter: blur(0);
+}
+}
+
+.anim {
+opacity: 0;
+animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.15s; }
+.d3 { animation-delay: 0.25s; }
+.d4 { animation-delay: 0.35s; }
+.d5 { animation-delay: 0.45s; }
+.d6 { animation-delay: 0.55s; }
+.d7 { animation-delay: 0.65s; }
+.d8 { animation-delay: 0.75s; }
+
+/* ========== استجابة الشاشات ========== */
+@media (max-width: 480px) {
+.card {
+padding: 40px 22px 36px;
+border-radius: 24px;
+}
+
+.avatar-container {
+width: 120px;
+height: 120px;
+}
+
+.avatar-img {
+width: 120px;
+height: 120px;
+}
+
+.orbit-ring.ring-1 { inset: -6px; }
+.orbit-ring.ring-2 { inset: -13px; }
+.orbit-ring.ring-3 { inset: -20px; }
+
+.display-name {
+font-size: 1.7rem;
+}
+
+.link-card {
+padding: 16px 18px;
+gap: 14px;
+border-radius: 16px;
+}
+
+.link-icon {
+width: 46px;
+height: 46px;
+border-radius: 12px;
+}
+
+.link-icon svg {
+width: 20px;
+height: 20px;
+}
+}
+
+@media (max-width: 360px) {
+.main-container {
+padding: 16px 10px;
+}
+
+.card {
+padding: 32px 16px 28px;
+border-radius: 20px;
+}
+
+.avatar-container {
+width: 100px;
+height: 100px;
+}
+
+.avatar-img {
+width: 100px;
+height: 100px;
+}
+
+.display-name {
+font-size: 1.45rem;
+}
+
+.link-card {
+padding: 14px 14px;
+gap: 10px;
+}
+
+.link-icon {
+width: 40px;
+height: 40px;
+border-radius: 10px;
+}
+
+.link-arrow {
+width: 30px;
+height: 30px;
+}
+
+.badge {
+padding: 4px 10px;
+font-size: 0.65rem;
+}
+}
+
+/* ========== تقليل الحركة ========== */
+@media (prefers-reduced-motion: reduce) {
+*, *::before, *::after {
+animation-duration: 0.01ms !important;
+transition-duration: 0.01ms !important;
+}
+}
+</style></head>
 <body>
 
-    <!-- خلفية متحركة -->
-    <div class="bg-particles"></div>
-    <div class="grid-overlay"></div>
+<!-- خلفيات -->
+<canvas id="particleCanvas"></canvas>
+<div class="ambient-glow glow-1"></div>
+<div class="ambient-glow glow-2"></div>
+<div class="ambient-glow glow-3"></div>
+<div class="grid-bg"></div>
+<div class="scan-lines"></div>
 
-    <!-- المحتوى الرئيسي -->
-    <main class="main-wrapper">
-        <div class="profile-card">
-            
-            <!-- صورة البروفايل -->
-            <div class="avatar-wrapper animate-in delay-1">
-                <div class="avatar-ring"></div>
-                <div class="avatar-ring"></div>
-                <img 
-                    src="logo.png" 
-                    alt="قرجومه" 
-                    class="avatar-img"
-                    loading="eager"
-                    onerror="this.style.display='none'; 
-                             var fallback = document.createElement('div');
-                             fallback.className = 'avatar-img';
-                             fallback.style.cssText = 'display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg, #1a1a2e, #2d1f3d);color:white;';
-                             fallback.textContent = '🎮';
-                             this.parentElement.appendChild(fallback);"
-                >
-            </div>
+<!-- المحتوى -->
+<main class="main-container">
+<div class="card">
 
-            <!-- معلومات البروفايل -->
-            <div class="profile-info animate-in delay-2">
-                <h1 class="username">
-                    <span class="verified-badge"></span>
-                    قرجومه
-                </h1>
-                <p class="bio">Gaming Content Creator</p>
-                <span class="tag">Free Fire • Elite Squad</span>
-            </div>
+<!-- الأفاتار -->
+<div class="avatar-section anim d1">
+<div class="avatar-container" id="avatarContainer">
+<div class="orbit-ring ring-1"></div>
+<div class="orbit-ring ring-2"></div>
+<div class="orbit-ring ring-3"></div>
+<div class="orbit-dot dot-1"></div>
+<div class="orbit-dot dot-2"></div>
+<div class="orbit-dot dot-3"></div>
+<img
+src="logo.png"
+alt="قرجومه"
+class="avatar-img"
+loading="eager"
+onerror="this.style.display='none';
+var fb=document.createElement('div');
+fb.className='avatar-img';
+fb.style.cssText='display:flex;align-items:center;justify-content:center;font-size:3.5rem;background:linear-gradient(135deg,#1a0a0a,#0a0a1a);';
+fb.textContent='🎮';
+this.parentElement.appendChild(fb);"
+>
+<div class="status-badge">
+<div class="status-dot"></div>
+</div>
+</div>
+</div>
 
-            <!-- فاصل -->
-            <div class="divider animate-in delay-3"></div>
+<!-- معلومات -->
+<div class="profile-info anim d2">
+<div class="name-row">
+<h1 class="display-name">قرجومه</h1>
+<span class="verified">
+<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+</span>
+</div>
+<p class="tagline">Gaming Content Creator</p>
+</div>
 
-            <!-- أزرار التواصل - كل الروابط هنا -->
-            <nav class="links-stack" aria-label="روابط التواصل الاجتماعي">
-                
-                <!-- يوتيوب -->
-                <a href="https://www.youtube.com/@Elita_27" 
-                   class="link-btn youtube animate-in delay-3"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   aria-label="قناة اليوتيوب">
-                    <div class="platform-icon yt">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                        </svg>
-                    </div>
-                    <div class="link-label">
-                        <div class="platform-name">YouTube</div>
-                        <div class="platform-handle">@Elita_27</div>
-                    </div>
-                    <span class="arrow-icon">→</span>
-                </a>
+<!-- شارات -->
+<div class="badges-row anim d3">
+<span class="badge badge-fire">
+<span class="badge-icon">🔥</span>
+Free Fire
+</span>
+<span class="badge badge-elite">
+<span class="badge-icon">⚡</span>
+Elite Squad
+</span>
+</div>
 
-                <!-- تيك توك -->
-                <a href="https://www.tiktok.com/@elita27" 
-                   class="link-btn tiktok animate-in delay-4"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   aria-label="حساب التيك توك">
-                    <div class="platform-icon tt">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                        </svg>
-                    </div>
-                    <div class="link-label">
-                        <div class="platform-name">TikTok</div>
-                        <div class="platform-handle">@elita27</div>
-                    </div>
-                    <span class="arrow-icon">→</span>
-                </a>
+<!-- روابط -->
+<nav class="links-container" aria-label="روابط التواصل">
 
-                <!-- انستقرام -->
-                <a href="https://www.instagram.com/elita._27" 
-                   class="link-btn instagram animate-in delay-5"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   aria-label="حساب الانستقرام">
-                    <div class="platform-icon ig">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-                        </svg>
-                    </div>
-                    <div class="link-label">
-                        <div class="platform-name">Instagram</div>
-                        <div class="platform-handle">@elita._27</div>
-                    </div>
-                    <span class="arrow-icon">→</span>
-                </a>
+<!-- يوتيوب -->
+<a href="https://www.youtube.com/@Elita_27"
+class="link-card youtube anim d4"
+target="_blank"
+rel="noopener noreferrer"
+aria-label="يوتيوب">
+<div class="link-icon yt-icon">
+<svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+</div>
+<div class="link-text">
+<div class="link-platform">YouTube</div>
+<div class="link-handle">@Elita_27</div>
+</div>
+<div class="link-arrow">
+<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+</div>
+</a>
 
-            </nav>
-        </div>
+<!-- تيك توك -->
+<a href="https://www.tiktok.com/@elita27"
+class="link-card tiktok anim d5"
+target="_blank"
+rel="noopener noreferrer"
+aria-label="تيك توك">
+<div class="link-icon tt-icon">
+<svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+</div>
+<div class="link-text">
+<div class="link-platform">TikTok</div>
+<div class="link-handle">@elita27</div>
+</div>
+<div class="link-arrow">
+<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+</div>
+</a>
 
-        <!-- تذييل -->
-        <p class="footer-note animate-in delay-5">© 2024 قرجومه • جميع الحقوق محفوظة</p>
-    </main>
+<!-- انستقرام -->
+<a href="https://www.instagram.com/gerjouma_27?igsh=MXZncnM2MWVwNzgybw%3D%3D&utm_source=qr"
+class="link-card instagram anim d6"
+target="_blank"
+rel="noopener noreferrer"
+aria-label="انستقرام">
+<div class="link-icon ig-icon">
+<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+</div>
+<div class="link-text">
+<div class="link-platform">Instagram</div>
+<div class="link-handle">@gerjouma_27</div>
+</div>
+<div class="link-arrow">
+<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+</div>
+</a>
 
-    <script>
-        /**
-         * ============================================
-         * قرجومه - Professional Link Page
-         * Hand-crafted with precision
-         * ============================================
-         */
+</nav>
+</div>
 
-        (function() {
-            'use strict';
+<footer class="footer anim d7">
+<p class="footer-text">
+صُنع بـ <span class="footer-heart">♥</span> — © 2024 قرجومه
+</p>
+</footer>
+</main>
 
-            // ============ Ripple Effect on Buttons ============
-            function createRipple(event) {
-                const button = event.currentTarget;
-                const ripple = document.createElement('span');
-                const rect = button.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = event.clientX - rect.left - size / 2;
-                const y = event.clientY - rect.top - size / 2;
+<script>
+(function() {
+'use strict';
 
-                ripple.classList.add('ripple');
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
+/* ============================
+نظام الجزيئات (Canvas)
+============================ */
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouseX = -1000;
+let mouseY = -1000;
+let animFrameId = null;
 
-                button.appendChild(ripple);
+function resizeCanvas() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
 
-                ripple.addEventListener('animationend', function() {
-                    ripple.remove();
-                });
-            }
+class Particle {
+constructor() {
+this.reset();
+}
 
-            // ============ Magnetic Hover Effect on Avatar ============
-            function initMagneticEffect() {
-                const avatar = document.querySelector('.avatar-wrapper');
-                if (!avatar) return;
+reset() {
+this.x = Math.random() * canvas.width;
+this.y = Math.random() * canvas.height;
+this.size = Math.random() * 1.5 + 0.3;
+this.speedX = (Math.random() - 0.5) * 0.3;
+this.speedY = (Math.random() - 0.5) * 0.3;
+this.opacity = Math.random() * 0.4 + 0.1;
+this.baseOpacity = this.opacity;
+this.hue = Math.random() > 0.7 ? 0 : (Math.random() > 0.5 ? 330 : 180);
+this.saturation = this.hue === 180 ? 80 : 70;
+this.lightness = 55;
+}
 
-                avatar.addEventListener('mousemove', function(e) {
-                    const rect = avatar.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    const strength = 15;
-                    
-                    const img = avatar.querySelector('.avatar-img');
-                    if (img) {
-                        img.style.transform = `translate(${x / strength}px, ${y / strength}px) scale(1.05)`;
-                    }
-                });
+update() {
+this.x += this.speedX;
+this.y += this.speedY;
 
-                avatar.addEventListener('mouseleave', function() {
-                    const img = avatar.querySelector('.avatar-img');
-                    if (img) {
-                        img.style.transform = 'translate(0, 0) scale(1)';
-                    }
-                });
-            }
+// تفاعل مع الماوس
+const dx = this.x - mouseX;
+const dy = this.y - mouseY;
+const dist = Math.sqrt(dx * dx + dy * dy);
+const maxDist = 150;
 
-            // ============ Intersection Observer for Animation ============
-            function initScrollReveal() {
-                const elements = document.querySelectorAll('.animate-in');
-                
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.animationPlayState = 'running';
-                        }
-                    });
-                }, { threshold: 0.1 });
+if (dist < maxDist) {
+const force = (1 - dist / maxDist) * 0.5;
+this.x += (dx / dist) * force;
+this.y += (dy / dist) * force;
+this.opacity = Math.min(1, this.baseOpacity + (1 - dist / maxDist) * 0.6);
+} else {
+this.opacity += (this.baseOpacity - this.opacity) * 0.05;
+}
 
-                elements.forEach(el => {
-                    observer.observe(el);
-                });
-            }
+// إعادة التموضع إذا خرجت من الشاشة
+if (this.x < -10) this.x = canvas.width + 10;
+if (this.x > canvas.width + 10) this.x = -10;
+if (this.y < -10) this.y = canvas.height + 10;
+if (this.y > canvas.height + 10) this.y = -10;
+}
 
-            // ============ Initialize Everything ============
-            function init() {
-                // Add ripple to all buttons
-                const buttons = document.querySelectorAll('.link-btn');
-                buttons.forEach(btn => {
-                    btn.addEventListener('click', createRipple);
-                });
+draw() {
+ctx.beginPath();
+ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, ${this.opacity})`;
+ctx.fill();
+}
+}
 
-                // Magnetic effect on avatar
-                initMagneticEffect();
+function initParticles() {
+const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 15000));
+particles = [];
+for (let i = 0; i < count; i++) {
+particles.push(new Particle());
+}
+}
 
-                // Scroll reveal (fallback if animations aren't visible)
-                initScrollReveal();
+function drawConnections() {
+const maxConnDist = 120;
+for (let i = 0; i < particles.length; i++) {
+for (let j = i + 1; j < particles.length; j++) {
+const dx = particles[i].x - particles[j].x;
+const dy = particles[i].y - particles[j].y;
+const dist = Math.sqrt(dx * dx + dy * dy);
 
-                // Log (professional touch - for debugging)
-                console.log('%c قرجومه %c Link Page Initialized ',
-                    'background:#ff3d3d;color:white;padding:4px 8px;border-radius:4px 0 0 4px;font-weight:bold;',
-                    'background:#1a1a1a;color:#a0a0a0;padding:4px 8px;border-radius:0 4px 4px 0;');
-                console.log('%c Hand-crafted with precision • No AI shortcuts ',
-                    'color:#666;font-style:italic;');
-            }
+if (dist < maxConnDist) {
+const opacity = (1 - dist / maxConnDist) * 0.08;
+ctx.beginPath();
+ctx.moveTo(particles[i].x, particles[i].y);
+ctx.lineTo(particles[j].x, particles[j].y);
+ctx.strokeStyle = `rgba(255, 45, 45, ${opacity})`;
+ctx.lineWidth = 0.5;
+ctx.stroke();
+}
+}
+}
+}
 
-            // Run when DOM is ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
+function animateParticles() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        })();
-    </script>
+particles.forEach(p => {
+p.update();
+p.draw();
+});
 
-</body>
+drawConnections();
+animFrameId = requestAnimationFrame(animateParticles);
+}
+
+// تتبع الماوس
+document.addEventListener('mousemove', function(e) {
+mouseX = e.clientX;
+mouseY = e.clientY;
+});
+
+document.addEventListener('mouseleave', function() {
+mouseX = -1000;
+mouseY = -1000;
+});
+
+// تتبع اللمس
+document.addEventListener('touchmove', function(e) {
+if (e.touches.length > 0) {
+mouseX = e.touches[0].clientX;
+mouseY = e.touches[0].clientY;
+}
+}, { passive: true });
+
+document.addEventListener('touchend', function() {
+mouseX = -1000;
+mouseY = -1000;
+});
+
+// تهيئة الكانفاس
+resizeCanvas();
+initParticles();
+animateParticles();
+
+window.addEventListener('resize', function() {
+resizeCanvas();
+initParticles();
+});
+
+/* ============================
+تأثير Magnetic على الأفاتار
+============================ */
+var avatarContainer = document.getElementById('avatarContainer');
+if (avatarContainer) {
+avatarContainer.addEventListener('mousemove', function(e) {
+var rect = avatarContainer.getBoundingClientRect();
+var x = e.clientX - rect.left - rect.width / 2;
+var y = e.clientY - rect.top - rect.height / 2;
+var img = avatarContainer.querySelector('.avatar-img');
+if (img) {
+img.style.transform = 'translate(' + (x / 10) + 'px, ' + (y / 10) + 'px) scale(1.08)';
+}
+});
+
+avatarContainer.addEventListener('mouseleave', function() {
+var img = avatarContainer.querySelector('.avatar-img');
+if (img) {
+img.style.transform = 'translate(0, 0) scale(1)';
+}
+});
+}
+
+/* ============================
+تأثير Ripple
+============================ */
+var linkCards = document.querySelectorAll('.link-card');
+linkCards.forEach(function(card) {
+card.addEventListener('click', function(e) {
+var ripple = document.createElement('span');
+ripple.className = 'ripple-effect';
+var rect = card.getBoundingClientRect();
+var size = Math.max(rect.width, rect.height);
+var x = e.clientX - rect.left - size / 2;
+var y = e.clientY - rect.top - size / 2;
+ripple.style.width = size + 'px';
+ripple.style.height = size + 'px';
+ripple.style.left = x + 'px';
+ripple.style.top = y + 'px';
+card.appendChild(ripple);
+ripple.addEventListener('animationend', function() {
+ripple.remove();
+});
+});
+});
+
+/* ============================
+تأثير Tilt خفيف على الكارد
+============================ */
+var card = document.querySelector('.card');
+if (card) {
+card.addEventListener('mousemove', function(e) {
+var rect = card.getBoundingClientRect();
+var x = (e.clientX - rect.left) / rect.width - 0.5;
+var y = (e.clientY - rect.top) / rect.height - 0.5;
+card.style.transform = 'perspective(1000px) rotateY(' + (x * 2) + 'deg) rotateX(' + (-y * 2) + 'deg)';
+});
+
+card.addEventListener('mouseleave', function() {
+card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+card.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+setTimeout(function() {
+card.style.transition = '';
+}, 600);
+});
+}
+
+/* ============================
+طباعة في الكونسول
+============================ */
+console.log('%c قرجومه ', 'background: linear-gradient(135deg, #ff2d2d, #ff6b6b); color: white; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: bold; font-family: Tajawal, sans-serif;');
+console.log('%c Elite Gaming Link Page ', 'color: #6b6b7b; font-style: italic; font-family: Tajawal, sans-serif;');
+
+})();
+</script></body>
 </html>
